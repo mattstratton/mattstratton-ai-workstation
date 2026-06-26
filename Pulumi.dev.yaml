@@ -1,4 +1,5 @@
 config:
+  aws:profile: tiger-den
   aws:region: us-east-1
   mattstratton-ai-workstation:instance-type: t3.large
   mattstratton-ai-workstation:ebs-size-gb: "100"
