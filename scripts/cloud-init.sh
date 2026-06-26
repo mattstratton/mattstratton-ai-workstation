@@ -115,16 +115,13 @@ sudo -u "${USERNAME}" bash -c 'pipx install thefuck'
 # --- 16. Clone Timescale repos ---
 sudo -u "${USERNAME}" mkdir -p "${USER_HOME}/src/github.com/timescale"
 sudo -u "${USERNAME}" git clone git@github.com:timescale/tiger-den.git \
-    "${USER_HOME}/src/github.com/timescale/tiger-den"
+    "${USER_HOME}/src/github.com/timescale/tiger-den" || echo "WARNING: tiger-den clone failed, skipping"
 sudo -u "${USERNAME}" git clone git@github.com:timescale/marketing-skills.git \
-    "${USER_HOME}/src/github.com/timescale/marketing-skills"
+    "${USER_HOME}/src/github.com/timescale/marketing-skills" || echo "WARNING: marketing-skills clone failed, skipping"
 sudo -u "${USERNAME}" git clone git@github.com:timescale/rta-bench-private.git \
-    "${USER_HOME}/src/github.com/timescale/rta-bench-private"
+    "${USER_HOME}/src/github.com/timescale/rta-bench-private" || echo "WARNING: rta-bench-private clone failed, skipping"
 
-# --- 17. Dotfiles (clone only — bootstrap NOT run, review for Linux compat first) ---
-sudo -u "${USERNAME}" yadm clone "${DOTFILES_REPO}"
-
-# --- 18. zshrc (minimal baseline; yadm dotfiles may override) ---
+# --- 17. zshrc (write baseline first so yadm clone can override) ---
 cat > "${USER_HOME}/.zshrc" << 'ZSHRC'
 export PATH="$HOME/.local/bin:$HOME/.local/pipx/bin:$HOME/go/bin:/usr/local/bin:$PATH"
 source /usr/share/zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
@@ -137,6 +134,9 @@ eval "$(thefuck --alias)"
 source /usr/share/zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ZSHRC
 chown "${USERNAME}:${USERNAME}" "${USER_HOME}/.zshrc"
+
+# --- 18. Dotfiles (clone only — bootstrap NOT run, review for Linux compat first) ---
+sudo -u "${USERNAME}" yadm clone "${DOTFILES_REPO}"
 
 # --- 19. moshi-hook systemd service ---
 cat > /etc/systemd/system/moshi-hook.service << SYSTEMD
