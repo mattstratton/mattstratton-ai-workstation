@@ -64,9 +64,12 @@ curl -sS https://starship.rs/install.sh | sh -s -- --yes
 
 # --- 7. herdr ---
 curl -fsSL https://herdr.dev/install.sh | sh
+mv /root/.local/bin/herdr /usr/local/bin/herdr
 
 # --- 8. moshi-hook ---
 curl -fsSL https://getmoshi.app/install.sh | sh
+mv /root/.local/bin/moshi-hook /usr/local/bin/moshi-hook
+mv /root/.local/bin/moshi /usr/local/bin/moshi
 
 # --- 9. tiger-cli ---
 TIGER_VERSION=$(curl -sf https://api.github.com/repos/timescale/tiger-cli/releases/latest | jq -r '.tag_name')
