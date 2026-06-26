@@ -1,0 +1,10 @@
+config:
+  aws:profile: tiger-den
+  aws:region: us-east-1
+  mattstratton-ai-workstation:instance-type: t3.large
+  mattstratton-ai-workstation:ebs-size-gb: "100"
+  mattstratton-ai-workstation:user-name: matty
+  mattstratton-ai-workstation:git-name: Matt Stratton
+  mattstratton-ai-workstation:git-email: matty@tigerdata.com
+  mattstratton-ai-workstation:github-secret-name: workstation/github-ssh-key
+  mattstratton-ai-workstation:dotfiles-repo: https://github.com/mattstratton/matty-dotfiles

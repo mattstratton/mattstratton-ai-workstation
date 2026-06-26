@@ -1,0 +1,19 @@
+{
+  "name": "mattstratton-ai-workstation",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "mocha --timeout 10000 -r ts-node/register 'tests/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@pulumi/pulumi": "^3",
+    "@pulumi/aws": "^6"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10",
+    "@types/node": "^20",
+    "mocha": "^10",
+    "ts-node": "^10",
+    "typescript": "^5"
+  }
+}
