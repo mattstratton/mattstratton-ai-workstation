@@ -29,7 +29,7 @@ export function createCompute(
         ],
     });
 
-    const instance = new aws.ec2.Instance("workstation", {
+    const instance = new aws.ec2.Instance("mattstratton-workstation", {
         ami: ami.then(a => a.id),
         instanceType: cfg.instanceType as aws.ec2.InstanceType,
         vpcSecurityGroupIds: [sg.id],
@@ -42,17 +42,17 @@ export function createCompute(
             deleteOnTermination: true,
         },
         tags: {
-            Name: "ai-workstation",
+            Name: "mattstratton-ai-workstation",
             ManagedBy: "pulumi",
         },
     });
 
-    const eip = new aws.ec2.Eip("workstation-eip", {
+    const eip = new aws.ec2.Eip("mattstratton-workstation-eip", {
         domain: "vpc",
-        tags: { Name: "ai-workstation-eip" },
+        tags: { Name: "mattstratton-ai-workstation-eip" },
     });
 
-    const eipAssoc = new aws.ec2.EipAssociation("workstation-eip-assoc", {
+    const eipAssoc = new aws.ec2.EipAssociation("mattstratton-workstation-eip-assoc", {
         instanceId: instance.id,
         allocationId: eip.allocationId,
     });

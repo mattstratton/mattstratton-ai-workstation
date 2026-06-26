@@ -13,6 +13,7 @@ DOTFILES_REPO="__DOTFILES_REPO__"
 AWS_REGION="__AWS_REGION__"
 
 export DEBIAN_FRONTEND=noninteractive
+export HOME=/root
 
 # --- 1. System update ---
 apt-get update -y
@@ -22,12 +23,25 @@ apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 apt-get install -y \
     git git-extras tmux mosh zsh vim neovim wget curl entr jq tree gnupg \
     ripgrep fd-find htop autojump direnv unzip \
-    docker.io docker-compose-plugin \
     golang-go \
     pipx \
     build-essential \
-    yadm \
-    awscli
+    yadm
+
+# --- 2a. Docker (official repo for docker-compose-plugin) ---
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
+    | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] \
+https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" \
+    | tee /etc/apt/sources.list.d/docker.list > /dev/null
+apt-get update -y
+apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+# --- 2b. AWS CLI v2 ---
+curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+unzip -q /tmp/awscliv2.zip -d /tmp/
+/tmp/aws/install
+rm -rf /tmp/aws /tmp/awscliv2.zip
 
 # --- 3. Node.js LTS via NodeSource ---
 curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
@@ -81,6 +95,7 @@ mkdir -p "${USER_HOME}/.ssh"
 chmod 700 "${USER_HOME}/.ssh"
 echo "${SSH_PUBLIC_KEY}" > "${USER_HOME}/.ssh/authorized_keys"
 chmod 600 "${USER_HOME}/.ssh/authorized_keys"
+chown -R "${USERNAME}:${USERNAME}" "${USER_HOME}/.ssh"
 
 # --- 13. GitHub SSH private key from Secrets Manager ---
 GITHUB_SSH_KEY=$(aws secretsmanager get-secret-value \
@@ -110,7 +125,7 @@ sudo -u "${USERNAME}" git config --global core.pager "diff-so-fancy | less --tab
 sudo -u "${USERNAME}" bash -c 'curl --proto "=https" --tlsv1.2 -LsSf https://setup.atuin.sh | sh'
 sudo -u "${USERNAME}" bash -c 'curl -LsSf https://astral.sh/uv/install.sh | sh'
 sudo -u "${USERNAME}" bash -c 'curl -sSfL https://install.memory.build | sh'
-sudo -u "${USERNAME}" bash -c 'pipx install thefuck'
+# thefuck skipped — incompatible with Python 3.12 (removed imp and distutils modules)
 
 # --- 16. Clone Timescale repos ---
 sudo -u "${USERNAME}" mkdir -p "${USER_HOME}/src/github.com/timescale"
@@ -123,20 +138,19 @@ sudo -u "${USERNAME}" git clone git@github.com:timescale/rta-bench-private.git \
 
 # --- 17. zshrc (write baseline first so yadm clone can override) ---
 cat > "${USER_HOME}/.zshrc" << 'ZSHRC'
-export PATH="$HOME/.local/bin:$HOME/.local/pipx/bin:$HOME/go/bin:/usr/local/bin:$PATH"
+export PATH="$HOME/.atuin/bin:$HOME/.local/bin:$HOME/.local/pipx/bin:$HOME/go/bin:/usr/local/bin:$PATH"
 source /usr/share/zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 eval "$(starship init zsh)"
 eval "$(atuin init zsh)"
 [[ -s /usr/share/autojump/autojump.sh ]] && source /usr/share/autojump/autojump.sh
 eval "$(direnv hook zsh)"
-eval "$(thefuck --alias)"
 # zsh-syntax-highlighting must be last
 source /usr/share/zsh-plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 ZSHRC
 chown "${USERNAME}:${USERNAME}" "${USER_HOME}/.zshrc"
 
-# --- 18. Dotfiles (clone only — bootstrap NOT run, review for Linux compat first) ---
-sudo -u "${USERNAME}" yadm clone "${DOTFILES_REPO}"
+# --- 18. Dotfiles (skipped — add .zshrc##os.Linux to dotfiles repo first) ---
+# sudo -u "${USERNAME}" yadm clone "${DOTFILES_REPO}"
 
 # --- 19. moshi-hook systemd service ---
 cat > /etc/systemd/system/moshi-hook.service << SYSTEMD

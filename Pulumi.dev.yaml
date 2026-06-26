@@ -6,5 +6,7 @@ config:
   mattstratton-ai-workstation:user-name: matty
   mattstratton-ai-workstation:git-name: Matt Stratton
   mattstratton-ai-workstation:git-email: matty@tigerdata.com
-  mattstratton-ai-workstation:github-secret-name: workstation/github-ssh-key
+  mattstratton-ai-workstation:github-secret-name: mattstratton-workstation/github-ssh-key
   mattstratton-ai-workstation:dotfiles-repo: https://github.com/mattstratton/matty-dotfiles
+  mattstratton-ai-workstation:ssh-public-key:
+    secure: AAABALCdWaq4+aCAKJLciIGMulw/2PEPuYVfjz2vBdFP7IRplFRtpdlrqZCkYZF9vXcl5q/KenC0pXJICss3Fx8cDWy/U8tJOsfqsYVImraNB3eMpy1j/Btfy6UGdcObzWq3kuiPfP++TWCPncd+rw==

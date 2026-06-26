@@ -23,7 +23,7 @@ export function loadConfig(): WorkstationConfig {
         gitName: config.get("git-name") ?? "Matt Stratton",
         gitEmail: config.get("git-email") ?? "matty@tigerdata.com",
         sshPublicKey: config.requireSecret("ssh-public-key"),
-        githubSecretName: config.get("github-secret-name") ?? "workstation/github-ssh-key",
+        githubSecretName: config.get("github-secret-name") ?? "mattstratton-workstation/github-ssh-key",
         dotfilesRepo: config.get("dotfiles-repo") ?? "https://github.com/mattstratton/matty-dotfiles",
         awsRegion: awsConfig.get("region") ?? "us-east-1",
     };

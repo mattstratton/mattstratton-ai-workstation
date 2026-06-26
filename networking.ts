@@ -1,8 +1,8 @@
 import * as aws from "@pulumi/aws";
 
 export function createSecurityGroup(): aws.ec2.SecurityGroup {
-    return new aws.ec2.SecurityGroup("workstation-sg", {
-        name: "ai-workstation",
+    return new aws.ec2.SecurityGroup("mattstratton-workstation-sg", {
+        name: "mattstratton-ai-workstation",
         description: "AI workstation: SSH and mosh",
         ingress: [
             {
