@@ -56,6 +56,7 @@ curl -fsSL https://getmoshi.app/install.sh | sh
 
 # --- 9. tiger-cli ---
 TIGER_VERSION=$(curl -sf https://api.github.com/repos/timescale/tiger-cli/releases/latest | jq -r '.tag_name')
+mkdir -p /tmp/tiger-install
 curl -fsSL "https://github.com/timescale/tiger-cli/releases/download/${TIGER_VERSION}/tiger-cli_Linux_x86_64.tar.gz" \
     | tar -xz -C /tmp/tiger-install
 find /tmp/tiger-install -maxdepth 1 -type f -executable | xargs -I{} mv {} /usr/local/bin/tiger
@@ -109,7 +110,7 @@ sudo -u "${USERNAME}" git config --global core.pager "diff-so-fancy | less --tab
 sudo -u "${USERNAME}" bash -c 'curl --proto "=https" --tlsv1.2 -LsSf https://setup.atuin.sh | sh'
 sudo -u "${USERNAME}" bash -c 'curl -LsSf https://astral.sh/uv/install.sh | sh'
 sudo -u "${USERNAME}" bash -c 'curl -sSfL https://install.memory.build | sh'
-sudo -u "${USERNAME}" pipx install thefuck
+sudo -u "${USERNAME}" bash -c 'pipx install thefuck'
 
 # --- 16. Clone Timescale repos ---
 sudo -u "${USERNAME}" mkdir -p "${USER_HOME}/src/github.com/timescale"
